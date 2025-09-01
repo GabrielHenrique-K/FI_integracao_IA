@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    container_name: ia-games-api
+    environment:
+      - DATA_PATH=/app/data/base_jogos.csv
+    volumes:
+      - ./data/base_jogos.csv:/app/data/base_jogos.csv:ro
+    ports:
+      - "8000:8000"
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ui
+    container_name: ia-games-ui
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
